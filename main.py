@@ -5,17 +5,17 @@ from generator import *
 def read_grammar(file_name):
     result = None
     with open(file_name, 'r') as input_file:
-        lines = [s.rstrip() for s in input_file.readlines()]
-        if len(lines) > 1:
-            result = lines
+        sequences = [s.rstrip() for s in input_file.readlines()]
+        if len(sequences) > 1:
+            result = sequences
 
     return result
 
 
 def main():
-    lines = read_grammar(argv[1])
-    if lines:
-        AutoGenerateText().run(lines)
+    sequences = read_grammar(argv[1])
+    if sequences:
+        AutoGenerateText(sequences).run()
     else:
         print('Invalid input', file=stderr)
 

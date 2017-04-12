@@ -19,7 +19,10 @@ class Grammar:
         return self.letter == letter
 
     def get_default_string(self):
-        return 'A{0}->{1}'.format(self.parent_level, self.letter)
+        if self.parent_level == -1:
+            return 'S->{0}'.format(self.letter)
+        else:
+            return 'A{0}->{1}'.format(self.parent_level, self.letter)
 
     def get_printed_string(self):
         default_string = self.get_default_string()
