@@ -87,7 +87,7 @@ class Grammar:
 
         checked_right = []
         for left_child in left.nodes:
-            for right_child in [rightChild for rightChild in right.nodes if (rightChild not in checked_right)]:
+            for right_child in [right_child for right_child in right.nodes if (right_child not in checked_right)]:
                 if Grammar.equal_child(left_child, right_child):
                     checked_right.append(right_child)
                     break
