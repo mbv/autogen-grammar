@@ -7,7 +7,7 @@ class Grammar:
         self.parent = parent
         self.parent_level = parent.level
         self.is_recursion = False
-        self.recursionRepeat = []
+        self.recursion_repeat = []
 
     def set_level(self, level):
         self.level = level
@@ -71,7 +71,7 @@ class Grammar:
 
         self.parent.copy_object(new_node)
         self.parent.is_recursion = True
-        new_node.recursionRepeat.append(self.parent)
+        new_node.recursion_repeat.append(self.parent)
 
     @staticmethod
     def equal_child(left, right):
@@ -117,7 +117,7 @@ class Grammar:
         return result
 
     def merge_grammar(self, merged):
-        merged_nodes = merged.recursionRepeat[:]
+        merged_nodes = merged.recursion_repeat[:]
         merged_nodes.append(merged)
 
         for copy_node in merged_nodes:
@@ -125,5 +125,5 @@ class Grammar:
             copy_node.level = self.level
 
         merged.is_recursion = True
-        merged.recursionRepeat = []
-        self.recursionRepeat.extend(merged_nodes)
+        merged.recursion_repeat = []
+        self.recursion_repeat.extend(merged_nodes)
