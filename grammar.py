@@ -5,8 +5,8 @@ class Grammar:
         self.letter = letter
         self.nodes = []
         self.parent = parent
-        self.parentLevel = parent.level
-        self.isRecursion = False
+        self.parent_level = parent.level
+        self.is_recursion = False
         self.recursionRepeat = []
 
     def set_level(self, level):
@@ -19,7 +19,7 @@ class Grammar:
         return self.letter == letter
 
     def get_default_string(self):
-        return 'A{0}->{1}'.format(self.parentLevel, self.letter)
+        return 'A{0}->{1}'.format(self.parent_level, self.letter)
 
     def get_printed_string(self):
         default_string = self.get_default_string()
@@ -28,7 +28,7 @@ class Grammar:
     def print(self):
         if self != self.parent:
             print(self.get_printed_string())
-        if not self.isRecursion:
+        if not self.is_recursion:
             [x.print() for x in self.nodes]
 
     def __repr__(self):
@@ -55,7 +55,7 @@ class Grammar:
 
     def copy_object(self, new_node):
         self.letter = new_node.letter
-        self.level = new_node.parentLevel
+        self.level = new_node.parent_level
         self.nodes = new_node.parent.nodes
 
     def update_parent_recursion(self, new_node):
@@ -67,18 +67,18 @@ class Grammar:
             else:
                 new_node.parent.nodes.append(child)
                 child.parent = new_node.parent
-                child.parentLevel = new_node.parentLevel
+                child.parent_level = new_node.parent_level
 
         self.parent.copy_object(new_node)
-        self.parent.isRecursion = True
+        self.parent.is_recursion = True
         new_node.recursionRepeat.append(self.parent)
 
     @staticmethod
     def equal_child(left, right):
         return (left.letter == right.letter) and (
             (left.level == right.level) or (
-                (left.level == left.parentLevel) and (right.level == right.parentLevel)) or (
-                (left.level == right.parentLevel) and (right.level == left.parentLevel)))
+                (left.level == left.parent_level) and (right.level == right.parent_level)) or (
+                (left.level == right.parent_level) and (right.level == left.parent_level)))
 
     @staticmethod
     def equals_grammar(left, right):
@@ -86,10 +86,10 @@ class Grammar:
             return False
 
         checked_right = []
-        for leftChild in left.nodes:
-            for rightChild in [rightChild for rightChild in right.nodes if (not rightChild in checked_right)]:
-                if Grammar.equal_child(leftChild, rightChild):
-                    checked_right.append(rightChild)
+        for left_child in left.nodes:
+            for right_child in [rightChild for rightChild in right.nodes if (rightChild not in checked_right)]:
+                if Grammar.equal_child(left_child, right_child):
+                    checked_right.append(right_child)
                     break
         return True if len(checked_right) == len(right.nodes) else False
 
@@ -103,7 +103,7 @@ class Grammar:
 
     @staticmethod
     def find_equal_grammar(left, right):
-        if right.isRecursion or left.isRecursion:
+        if right.is_recursion or left.is_recursion:
             return False
         if (left != right) and (Grammar.equals_grammar(left, right)):
             return [left, right]
@@ -120,10 +120,10 @@ class Grammar:
         merged_nodes = merged.recursionRepeat[:]
         merged_nodes.append(merged)
 
-        for copyNode in merged_nodes:
-            copyNode.nodes = self.nodes
-            copyNode.level = self.level
+        for copy_node in merged_nodes:
+            copy_node.nodes = self.nodes
+            copy_node.level = self.level
 
-        merged.isRecursion = True
+        merged.is_recursion = True
         merged.recursionRepeat = []
         self.recursionRepeat.extend(merged_nodes)
